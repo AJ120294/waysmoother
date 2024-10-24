@@ -1,0 +1,104 @@
+/* HomePage.css */
+
+/* Styling for the home page container */
+.home-container {
+  padding-top: 40px;
+  background-color: #f0f4f8;
+  min-height: 100vh;
+}
+
+/* Styling for the main heading */
+h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #FF7043;
+  margin-bottom: 10px;
+}
+
+/* Styling for the tagline */
+.catchphrase {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: #8D6E63;
+  margin-bottom: 30px;
+}
+
+/* Form container styles */
+.form-container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+/* Journey section styles */
+.journey-section {
+  padding: 15px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: #f8f9fa;
+}
+
+/* Journey heading styles */
+.journey-heading {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #495057;
+}
+
+/* Add spacing between the input fields */
+.form-row {
+  margin-bottom: 15px;
+}
+
+/* Input fields styling */
+input, select {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+}
+
+/* Dropdown styling for time duration */
+.d-flex select {
+  flex: 1;
+  margin-right: 10px;
+}
+
+/* Priority dropdown */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Flexbox for the button group */
+.button-group {
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+/* Adding hover effects for buttons */
+button:hover {
+  background-color: #0056b3;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+/* Adding focus effects for inputs */
+input:focus, select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Image styling */
+.journey-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
