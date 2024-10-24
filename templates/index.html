@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+    <script>
+        function initAutocomplete() {
+            // Initialize autocomplete for all existing starting point and destination fields
+            var inputs = document.querySelectorAll('.autocomplete');
+            inputs.forEach(input => {
+                new google.maps.places.Autocomplete(input);
+            });
+        }
+
+        function addRouteFields() {
+            // Create a new div for the additional route fields
+            var routeDiv = document.createElement("div");
+            routeDiv.className = "route";
+
+            // Create the starting point input
+            var startPointLabel = document.createElement("label");
+            startPointLabel.textContent = "Starting Point:";
+            var startPointInput = document.createElement("input");
+            startPointInput.type = "text";
+            startPointInput.name = "start_points[]";
+            startPointInput.className = "autocomplete";
+            startPointInput.required = true;
+
+            // Create the destination input
+            var destinationLabel = document.createElement("label");
+            destinationLabel.textContent = "Destination:";
+            var destinationInput = document.createElement("input");
+            destinationInput.type = "text";
+            destinationInput.name = "destinations[]";
+            destinationInput.className = "autocomplete";
+            destinationInput.required = true;
+
+            // Create the visit time input
+            var visitTimeLabel = document.createElement("label");
+            visitTimeLabel.textContent = "Visit Time:";
+            var visitTimeInput = document.createElement("input");
+            visitTimeInput.type = "number";
+            visitTimeInput.name = "visit_times[]";
+            visitTimeInput.min = 0;
+            visitTimeInput.value = 1; // Default to 1 hour
+
+            var visitTimeUnitLabel = document.createElement("span");
+            visitTimeUnitLabel.textContent = " hour(s)";
+
+            // Append the fields to the new div
+            routeDiv.appendChild(startPointLabel);
+            routeDiv.appendChild(startPointInput);
+            routeDiv.appendChild(document.createElement("br"));
+            routeDiv.appendChild(destinationLabel);
+            routeDiv.appendChild(destinationInput);
+            routeDiv.appendChild(document.createElement("br"));
+            routeDiv.appendChild(visitTimeLabel);
+            routeDiv.appendChild(visitTimeInput);
+            routeDiv.appendChild(visitTimeUnitLabel);
+            routeDiv.appendChild(document.createElement("br"));
+            routeDiv.appendChild(document.createElement("br"));
+
+            // Append the new div to the form
+            document.getElementById("routes").appendChild(routeDiv);
+
+            // Initialize autocomplete for the newly added inputs
+            new google.maps.places.Autocomplete(startPointInput);
+            new google.maps.places.Autocomplete(destinationInput);
+        }
+
+        function calculateDepartureTimes() {
+            const routeDivs = document.querySelectorAll('.route');
+            let currentTime = new Date(); // Start with the current time
+
+            routeDivs.forEach((routeDiv, index) => {
+                const arrivalTimeField = routeDiv.querySelector('.arrival-time');
+                const visitTime = parseInt(routeDiv.querySelector('input[name="visit_times[]"]').value) || 1;
+                // Calculate the new departure time
+                currentTime.setHours(currentTime.getHours() + visitTime);
+                // Display the calculated time
+                arrivalTimeField.value = currentTime.toTimeString().split(' ')[0];
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Create Daily Plan</h1>
+    <form action="/directions" method="post">
+        <div id="routes">
+            <div class="route">
+                <label for="start_point">Starting Point:</label>
+                <input type="text" id="start_point" name="start_points[]" class="autocomplete" required><br><br>
+                <label for="destination">Destination:</label>
+                <input type="text" id="destination" name="destinations[]" class="autocomplete" required><br><br>
+                <label for="visit_time">Visit Time:</label>
+                <input type="number" id="visit_time" name="visit_times[]" value="1" min="0">
+                <span> hour(s)</span><br><br>
+                <label for="arrival_time">Departure Time:</label>
+                <input type="text" class="arrival-time" readonly><br><br>
+            </div>
+        </div>
+        <button type="button" onclick="addRouteFields()">+ Add Another Route</button><br><br>
+        <button type="button" onclick="calculateDepartureTimes()">Calculate Time</button><br><br>
+        <input type="submit" value="Create Daily Plan">
+    </form>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initAutocomplete" async defer></script>
+</body>
+</html>

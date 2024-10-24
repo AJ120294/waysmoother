@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Directions</title>
+    <style>
+      .map {
+        height: 400px;
+        width: 600px;
+        border: 1px solid black;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Daily Activity Plan</h1>
+    {% for schedule in all_routes %}
+    <h2>Route {{ loop.index }}</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>To</th>
+          <th>Departure Time</th>
+          <th>Arrival Time</th>
+          <th>Estimated Travel Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for leg in schedule %}
+        <tr>
+          <td>{{ leg.origin }}</td>
+          <td>{{ leg.destination }}</td>
+          <td>{{ leg.departure_time }}</td>
+          <td>{{ leg.arrival_time }}</td>
+          <td>{{ leg.estimated_travel_time }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div id="map{{ loop.index }}" class="map"></div>
+    {% endfor %}
+
+    <script>
+      function initMaps() {
+        {% for schedule in all_routes %}
+        var map{{ loop.index }} = new google.maps.Map(document.getElementById('map{{ loop.index }}'), {
+          center: {lat: -36.8485, lng: 174.7633}, // Auckland coordinates
+          zoom: 12
+        });
+        var directionsService{{ loop.index }} = new google.maps.DirectionsService();
+        var directionsRenderer{{ loop.index }} = new google.maps.DirectionsRenderer();
+        directionsRenderer{{ loop.index }}.setMap(map{{ loop.index }});
+
+        var origin = '{{ schedule[0]["origin"] }}';
+        var destination = '{{ schedule[-1]["destination"] }}';
+        var waypoints = [];
+
+        var request = {
+          origin: origin,
+          destination: destination,
+          waypoints: waypoints,
+          travelMode: google.maps.TravelMode.DRIVING
+        };
+
+        directionsService{{ loop.index }}.route(request, function(result, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsRenderer{{ loop.index }}.setDirections(result);
+          } else {
+            alert('Directions request failed due to ' + status);
+          }
+        });
+        {% endfor %}
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlCG_B-dTqzrexzWxe8D8wyJ24UmtCf-c&callback=initMaps" async defer></script>
+  </body>
+</html>
