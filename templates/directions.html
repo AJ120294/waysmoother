@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Directions</title>
+    <style>
+        .map {
+            height: 400px;
+            width: 600px;
+            border: 1px solid black;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Daily Activity Plan</h1>
+    <form action="/recalculate" method="post">
+        {% for schedule in all_routes %}
+        <h2>Route {{ loop.index }}</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Time</th>
+                    <th>Estimated Travel Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leg in schedule %}
+                <tr>
+                    <td>{{ leg.origin }}</td>
+                    <td>{{ leg.destination }}</td>
+                    <td>
+                        <input type="text" id="departure_time_{{ loop.index0 }}" value="{{ leg.departure_time }}" readonly>
+                    </td>
+                    <td>
+                        <input type="text" id="arrival_time_{{ loop.index0 }}" value="{{ leg.arrival_time }}" readonly>
+                    </td>
+                    <td>{{ leg.estimated_travel_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div>
+            <label for="visit_time_{{ loop.index0 }}">Visit Time:</label>
+            <input type="number" id="visit_time_{{ loop.index0 }}" name="visit_times[]" value="{{ visit_times[loop.index0] if visit_times is defined else 1 }}" min="0">
+            <span> hour(s)</span><br><br>
+        </div>
+
+        <!-- Hidden fields to pass start_points and destinations -->
+        <input type="hidden" name="start_points[]" value="{{ schedule[0]['origin'] }}">
+        <input type="hidden" name="destinations[]" value="{{ schedule[-1]['destination'] }}">
+
+        <div id="map{{ loop.index }}" class="map"></div>
+        {% endfor %}
+        <button type="submit">Calculate Time</button>
+    </form>
+
+    <script>
+        function initMaps() {
+            {% for schedule in all_routes %}
+            var map{{ loop.index }} = new google.maps.Map(document.getElementById('map{{ loop.index }}'), {
+                center: {lat: -36.8485, lng: 174.7633}, // Auckland coordinates
+                zoom: 12
+            });
+            var directionsService{{ loop.index }} = new google.maps.DirectionsService();
+            var directionsRenderer{{ loop.index }} = new google.maps.DirectionsRenderer();
+            directionsRenderer{{ loop.index }}.setMap(map{{ loop.index }});
+
+            var origin = '{{ schedule[0]["origin"] }}';
+            var destination = '{{ schedule[-1]["destination"] }}';
+            var waypoints = [];
+
+            var request = {
+                origin: origin,
+                destination: destination,
+                waypoints: waypoints,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+
+            directionsService{{ loop.index }}.route(request, function(result, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsRenderer{{ loop.index }}.setDirections(result);
+                } else {
+                    alert('Directions request failed due to ' + status);
+                }
+            });
+            {% endfor %}
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlCG_B-dTqzrexzWxe8D8wyJ24UmtCf-c&callback=initMaps" async defer></script>
+</body>
+</html>
