@@ -54,17 +54,18 @@ def recalculate():
     for start_point, destination, visit_time in zip(start_points, destinations, visit_times):
         day_of_week = datetime.now().strftime('%A')
         # Convert visit time to hours (default to 1 if not specified)
-        visit_duration = int(visit_time) if visit_time.isdigit() else 1
+        visit_duration = int(visit_time) if visit_time.isdigit() and int(visit_time) > 0 else 0
         # Create a daily plan for the current route, using the current_time
         daily_plan, current_time = create_daily_plan(start_point, [destination], day_of_week, current_time)
         # Add the visit duration to the current time for the next leg
-        current_time += timedelta(hours=visit_duration)
+        if visit_duration > 0:
+            current_time += timedelta(hours=visit_duration)
+            # Subtract 1 hour to compensate for the default 1-hour visit time already added
+            current_time -= timedelta(hours=1)
         all_routes.append(daily_plan)
 
     # Pass the list of daily plans and visit times to the template
     return render_template('directions.html', all_routes=all_routes, visit_times=visit_times)
-
-
 
 
 def create_daily_plan(home, places, day_of_week, current_time=None):
