@@ -10,63 +10,53 @@
             margin-bottom: 20px;
         }
     </style>
-    <script>
-        function calculateDepartureTime(index) {
-            // Get the visit time for the current route
-            var visitTimeInput = document.getElementById(`visit_time_${index}`);
-            var visitTime = parseInt(visitTimeInput.value) || 1; // Default to 1 hour if not set
-
-            // Get the arrival time from the previous route
-            var arrivalTimeInput = document.getElementById(`arrival_time_${index}`);
-            var arrivalTime = new Date(`1970-01-01T${arrivalTimeInput.value}:00`); // Parse time
-
-            // Calculate the new departure time
-            arrivalTime.setHours(arrivalTime.getHours() + visitTime);
-
-            // Update the departure time field for the next route
-            var departureTimeInput = document.getElementById(`departure_time_${index}`);
-            departureTimeInput.value = arrivalTime.toTimeString().split(' ')[0];
-        }
-    </script>
 </head>
 <body>
     <h1>Daily Activity Plan</h1>
-    {% for schedule in all_routes %}
-    <h2>Route {{ loop.index }}</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>From</th>
-                <th>To</th>
-                <th>Departure Time</th>
-                <th>Arrival Time</th>
-                <th>Estimated Travel Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for leg in schedule %}
-            <tr>
-                <td>{{ leg.origin }}</td>
-                <td>{{ leg.destination }}</td>
-                <td>{{ leg.departure_time }}</td>
-                <td><input type="text" id="arrival_time_{{ loop.parent.loop.index }}" value="{{ leg.arrival_time }}" readonly></td>
-                <td>{{ leg.estimated_travel_time }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <form action="/recalculate" method="post">
+        {% for schedule in all_routes %}
+        <h2>Route {{ loop.index }}</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Time</th>
+                    <th>Estimated Travel Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leg in schedule %}
+                <tr>
+                    <td>{{ leg.origin }}</td>
+                    <td>{{ leg.destination }}</td>
+                    <td>
+                        <input type="text" id="departure_time_{{ loop.index0 }}" value="{{ leg.departure_time }}" readonly>
+                    </td>
+                    <td>
+                        <input type="text" id="arrival_time_{{ loop.index0 }}" value="{{ leg.arrival_time }}" readonly>
+                    </td>
+                    <td>{{ leg.estimated_travel_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <div>
-        <label for="visit_time_{{ loop.index }}">Visit Time:</label>
-        <input type="number" id="visit_time_{{ loop.index }}" name="visit_time_{{ loop.index }}" value="1" min="0">
-        <span> hour(s)</span><br><br>
-        <label for="departure_time_{{ loop.index }}">Departure Time:</label>
-        <input type="text" id="departure_time_{{ loop.index }}" readonly><br><br>
-        <button type="button" onclick="calculateDepartureTime({{ loop.index }})">Calculate Time</button>
-    </div>
+        <div>
+            <label for="visit_time_{{ loop.index0 }}">Visit Time:</label>
+            <input type="number" id="visit_time_{{ loop.index0 }}" name="visit_times[]" value="{{ visit_times[loop.index0] if visit_times is defined else 1 }}" min="0">
+            <span> hour(s)</span><br><br>
+        </div>
 
-    <div id="map{{ loop.index }}" class="map"></div>
-    {% endfor %}
+        <!-- Hidden fields to pass start_points and destinations -->
+        <input type="hidden" name="start_points[]" value="{{ schedule[0]['origin'] }}">
+        <input type="hidden" name="destinations[]" value="{{ schedule[-1]['destination'] }}">
+
+        <div id="map{{ loop.index }}" class="map"></div>
+        {% endfor %}
+        <button type="submit">Calculate Time</button>
+    </form>
 
     <script>
         function initMaps() {

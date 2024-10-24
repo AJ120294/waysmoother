@@ -35,6 +35,36 @@ def get_estimated_travel_time(origin, destination, mode, current_time):
         # Fallback if no traffic data is available
         return timedelta(minutes=30)  # Default to 30 minutes
 
+@app.route('/recalculate', methods=['POST'])
+def recalculate():
+    # Get the list of visit times from the form
+    visit_times = request.form.getlist('visit_times[]')
+
+    # Get the existing routes (start_points and destinations)
+    start_points = request.form.getlist('start_points[]')
+    destinations = request.form.getlist('destinations[]')
+
+    if len(start_points) != len(destinations) or len(destinations) != len(visit_times):
+        # If the number of starting points, destinations, and visit times don't match, show an error
+        return "The number of starting points, destinations, and visit times must be equal.", 400
+
+    # Generate a daily plan for each route
+    all_routes = []
+    current_time = None
+    for start_point, destination, visit_time in zip(start_points, destinations, visit_times):
+        day_of_week = datetime.now().strftime('%A')
+        # Convert visit time to hours (default to 1 if not specified)
+        visit_duration = int(visit_time) if visit_time.isdigit() else 1
+        # Create a daily plan for the current route, using the current_time
+        daily_plan, current_time = create_daily_plan(start_point, [destination], day_of_week, current_time)
+        # Add the visit duration to the current time for the next leg
+        current_time += timedelta(hours=visit_duration)
+        all_routes.append(daily_plan)
+
+    # Pass the list of daily plans and visit times to the template
+    return render_template('directions.html', all_routes=all_routes, visit_times=visit_times)
+
+
 
 
 def create_daily_plan(home, places, day_of_week, current_time=None):
