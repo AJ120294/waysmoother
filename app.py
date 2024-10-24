@@ -73,30 +73,26 @@ def index():
 
 @app.route('/directions', methods=['POST'])
 def get_directions():
-    # Get the list of starting points, destinations, and visit times from the form
+    # Get the list of starting points and destinations from the form
     start_points = request.form.getlist('start_points[]')
     destinations = request.form.getlist('destinations[]')
-    visit_times = request.form.getlist('visit_times[]')
 
-    if len(start_points) != len(destinations) or len(destinations) != len(visit_times):
-        # If the number of starting points, destinations, and visit times don't match, show an error
-        return "The number of starting points, destinations, and visit times must be equal.", 400
+    if len(start_points) != len(destinations):
+        # If the number of starting points and destinations don't match, show an error
+        return "The number of starting points and destinations must be equal.", 400
 
     # Generate a daily plan for each route
     all_routes = []
     current_time = None
-    for start_point, destination, visit_time in zip(start_points, destinations, visit_times):
+    for start_point, destination in zip(start_points, destinations):
         day_of_week = datetime.now().strftime('%A')
-        # Convert visit time to hours (default to 1 if not specified)
-        visit_duration = int(visit_time) if visit_time.isdigit() else 1
         # Create a daily plan for the current route, using the current_time
         daily_plan, current_time = create_daily_plan(start_point, [destination], day_of_week, current_time)
-        # Add the visit duration to the current time for the next leg
-        current_time += timedelta(hours=visit_duration)
         all_routes.append(daily_plan)
 
     # Pass the list of daily plans to the template
     return render_template('directions.html', all_routes=all_routes)
+
 
 
 
