@@ -17,18 +17,37 @@ function HomePage() {
     setAutocompleteEndRefs([...autocompleteEndRefs, null]);
   };
 
-  const handlePlaceSelect = (index, type) => {
+  const updateAutocompleteRefs = (index, autocomplete, type) => {
     if (type === 'start') {
-      const place = autocompleteStartRefs[index].getPlace();
-      const newLocations = [...locations];
-      newLocations[index].startPoint = place.formatted_address || '';
-      setLocations(newLocations);
+      const newAutocompleteRefs = [...autocompleteStartRefs];
+      newAutocompleteRefs[index] = autocomplete;
+      setAutocompleteStartRefs(newAutocompleteRefs);
     } else if (type === 'end') {
-      const place = autocompleteEndRefs[index].getPlace();
-      const newLocations = [...locations];
-      newLocations[index].endPoint = place.formatted_address || '';
-      setLocations(newLocations);
+      const newAutocompleteRefs = [...autocompleteEndRefs];
+      newAutocompleteRefs[index] = autocomplete;
+      setAutocompleteEndRefs(newAutocompleteRefs);
     }
+  };
+
+  const handlePlaceSelect = (index, type) => {
+    const place = type === 'start' ? autocompleteStartRefs[index]?.getPlace() : autocompleteEndRefs[index]?.getPlace();
+    if (!place) {
+      alert('Place selection failed. Please try again.');
+      return;
+    }
+    const newLocations = [...locations];
+    if (type === 'start') {
+      newLocations[index].startPoint = place.formatted_address || '';
+    } else {
+      newLocations[index].endPoint = place.formatted_address || '';
+    }
+    setLocations(newLocations);
+  };
+
+  const removeLocation = (index) => {
+    setLocations(locations.filter((_, i) => i !== index));
+    setAutocompleteStartRefs(autocompleteStartRefs.filter((_, i) => i !== index));
+    setAutocompleteEndRefs(autocompleteEndRefs.filter((_, i) => i !== index));
   };
 
   const handleInputChange = (index, field, value) => {
@@ -39,7 +58,7 @@ function HomePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Make sure to navigate with state to pass the journey data to ResultPage
     navigate('/results', { state: { travelDate, locations, priority } });
   };
@@ -64,7 +83,7 @@ function HomePage() {
       <div className="row justify-content-center">
         <div className="col-md-8">
           <form onSubmit={handleSubmit} className="form-container">
-            
+
             {/* Date of Travel */}
             <div className="form-group">
               <label htmlFor="travelDate">Date of Travel</label>
@@ -84,11 +103,7 @@ function HomePage() {
                 <div className="form-row mb-3">
                   <div className="col">
                     <Autocomplete
-                      onLoad={(autocomplete) => {
-                        const newAutocompleteRefs = [...autocompleteStartRefs];
-                        newAutocompleteRefs[index] = autocomplete;
-                        setAutocompleteStartRefs(newAutocompleteRefs);
-                      }}
+                      onLoad={(autocomplete) => updateAutocompleteRefs(index, autocomplete, 'start')}
                       onPlaceChanged={() => handlePlaceSelect(index, 'start')}
                     >
                       <input
@@ -103,11 +118,7 @@ function HomePage() {
                   </div>
                   <div className="col">
                     <Autocomplete
-                      onLoad={(autocomplete) => {
-                        const newAutocompleteRefs = [...autocompleteEndRefs];
-                        newAutocompleteRefs[index] = autocomplete;
-                        setAutocompleteEndRefs(newAutocompleteRefs);
-                      }}
+                      onLoad={(autocomplete) => updateAutocompleteRefs(index, autocomplete, 'end')}
                       onPlaceChanged={() => handlePlaceSelect(index, 'end')}
                     >
                       <input
@@ -146,6 +157,7 @@ function HomePage() {
                     </div>
                   </div>
                 </div>
+                <button type="button" className="btn btn-danger" onClick={() => removeLocation(index)}>Remove</button>
               </div>
             ))}
             <div className="form-group">
