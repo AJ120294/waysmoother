@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { GoogleMap, DirectionsRenderer } from '@react-google-maps/api';
-import { calculateOptimalJourneys } from '../backend'; // If backend.js is in src folder
+import { calculateOptimalJourneys } from '../backend'; // Make sure the import path is correct
 
 function ResultPage() {
   const location = useLocation();
@@ -55,9 +55,9 @@ function ResultPage() {
           <p><strong>Start Point:</strong> {journey.startPoint}</p>
           <p><strong>End Point:</strong> {journey.endPoint}</p>
           <p><strong>Duration at End Point:</strong> {journey.duration}</p>
-          <p><strong>Optimal Start Time:</strong> {journey.optimalStartTime}</p>
+          <p><strong>Optimal Start Time:</strong> {journey.optimalStartTime ? journey.optimalStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</p>
           <p><strong>Estimated Travel Time:</strong> {journey.estimatedTravelTime}</p>
-          <p><strong>End Time:</strong> {journey.endTime}</p>
+          <p><strong>End Time:</strong> {journey.endTime ? journey.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</p>
 
           <div className="map-container">
             <GoogleMap

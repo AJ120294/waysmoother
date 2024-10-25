@@ -86,10 +86,7 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
     }
   }
 
-  // Step 2: Sort journeys based on initial optimal start times
-  initialJourneys.sort((a, b) => a.optimalStartTime - b.optimalStartTime);
-
-  // Step 3: Rearrange the journeys to avoid overlaps
+  // Step 2: Rearrange the journeys
   const finalJourneys = [];
   let lastEndTime = null;
 
@@ -97,7 +94,7 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
     let nextJourney = null;
     let nextIndex = -1;
 
-    // Find the next journey with the earliest optimal start time that doesn't overlap with lastEndTime
+    // Find the journey with the earliest optimal start time that doesn't overlap with lastEndTime
     for (let i = 0; i < initialJourneys.length; i++) {
       const journey = initialJourneys[i];
       if (!lastEndTime || journey.optimalStartTime >= lastEndTime) {
@@ -113,7 +110,9 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
       lastEndTime = nextJourney.endTime;
       initialJourneys.splice(nextIndex, 1);
     } else {
-      break; // No more journeys can be scheduled
+      // If no journey can start after the last end time, add the remaining journeys as is
+      finalJourneys.push(...initialJourneys);
+      break;
     }
   }
 
