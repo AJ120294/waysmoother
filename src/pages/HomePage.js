@@ -1,7 +1,8 @@
+// HomePage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Autocomplete } from '@react-google-maps/api';
-import './HomePage.css'; 
+import './HomePage.css';
 
 function HomePage() {
   const [travelDate, setTravelDate] = useState('');
@@ -58,8 +59,6 @@ function HomePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Make sure to navigate with state to pass the journey data to ResultPage
     navigate('/results', { state: { travelDate, locations, priority } });
   };
 
@@ -73,7 +72,7 @@ function HomePage() {
       <div className="row justify-content-center mt-5">
         <div className="col-md-8 text-center">
           <img
-            src="/HomePage_Image1.jpg" /* Replace with your image path */
+            src="/HomePage_Image1.jpg"
             alt="Journey Planner"
             className="img-fluid journey-image"
           />
@@ -157,7 +156,11 @@ function HomePage() {
                     </div>
                   </div>
                 </div>
-                <button type="button" className="btn btn-danger" onClick={() => removeLocation(index)}>Remove</button>
+                {index > 0 && (
+                  <button type="button" className="btn btn-danger" onClick={() => removeLocation(index)}>
+                    Remove
+                  </button>
+                )}
               </div>
             ))}
             <div className="form-group">

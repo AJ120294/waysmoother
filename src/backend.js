@@ -3,16 +3,19 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
   const directionsService = new window.google.maps.DirectionsService();
   const initialJourneys = [];
 
-  // Step 1: Calculate the optimal start time for each journey independently
+  // Step 1: Find the optimal start time for each journey independently
   for (const [index, location] of locations.entries()) {
     let optimalStartTime = null;
     let minimumTravelTime = Infinity;
     let bestDirections = null;
 
-    // Loop through different times within one hour starting from 8:00 AM
-    for (let i = 0; i <= 60; i += 5) {
-      const departureTime = new Date(`${travelDate}T08:00`);
-      departureTime.setMinutes(departureTime.getMinutes() + i);
+    // Start checking from 7 AM on the travel date
+    let currentTime = new Date(`${travelDate}T07:00`);
+
+    // Increment by 30 minutes for each check to find a potentially better time
+    for (let i = 0; i < 48; i++) { // 24-hour check with 30-minute increments
+      const departureTime = new Date(currentTime);
+      departureTime.setMinutes(departureTime.getMinutes() + i * 30);
 
       const directionsRequest = {
         origin: location.startPoint,
@@ -86,7 +89,7 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
     }
   }
 
-  // Step 2: Rearrange the journeys
+  // Step 2: Rearrange journeys based on calculated optimal times
   const finalJourneys = [];
   let lastEndTime = null;
 
@@ -94,7 +97,7 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
     let nextJourney = null;
     let nextIndex = -1;
 
-    // Find the journey with the earliest optimal start time that doesn't overlap with lastEndTime
+    // Find the journey with the earliest optimal start time after lastEndTime
     for (let i = 0; i < initialJourneys.length; i++) {
       const journey = initialJourneys[i];
       if (!lastEndTime || journey.optimalStartTime >= lastEndTime) {
