@@ -51,13 +51,14 @@ function ResultPage() {
 
       {journeyData.map((journey, index) => (
         <div key={index} className="journey-box">
-          <h4>Journey {index + 1}</h4>
+          {/* Use originalIndex to maintain the original title */}
+          <h4>Journey {journey.originalIndex + 1}</h4>
           <p><strong>Start Point:</strong> {journey.startPoint}</p>
           <p><strong>End Point:</strong> {journey.endPoint}</p>
           <p><strong>Duration at End Point:</strong> {journey.duration}</p>
-          <p><strong>Optimal Start Time:</strong> {journey.optimalStartTime ? journey.optimalStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</p>
+          <p><strong>Optimal Start Time:</strong> {journey.optimalStartTime ? journey.optimalStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : ''}</p>
           <p><strong>Estimated Travel Time:</strong> {journey.estimatedTravelTime}</p>
-          <p><strong>End Time:</strong> {journey.endTime ? journey.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</p>
+          <p><strong>End Time:</strong> {journey.endTime ? journey.endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : ''}</p>
 
           <div className="map-container">
             <GoogleMap

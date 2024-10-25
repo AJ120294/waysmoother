@@ -82,7 +82,7 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
           : bestDirections.routes[0].legs[0].duration.text,
         endTime,
         directions: bestDirections,
-        originalIndex: index,
+        originalIndex: index, // Keep the original index to maintain the original title
       });
     } else {
       console.error(`Could not find a suitable departure time for journey ${index + 1}.`);
