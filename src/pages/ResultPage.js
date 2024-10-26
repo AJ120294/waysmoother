@@ -59,7 +59,6 @@ function ResultPage() {
           <div key={index} className="journey-box">
             <h4>Journey {journey.originalIndex + 1}</h4>
 
-            {/* Start Point and End Point in separate boxes */}
             <div className="journey-locations">
               <div className="location-box">
                 <strong>Start Point:</strong> {journey.startPoint}
@@ -69,18 +68,21 @@ function ResultPage() {
               </div>
             </div>
 
-            {/* First row: Optimal Start Time and Estimated Travel Time */}
+            {/* Display Preferred Time Option and Calculated Optimal Time */}
             <div className="timing-row">
               <div className="timing-box">
-                <strong>Optimal Start:</strong> {journey.formattedStartTime}
+                <strong>Preferred {journey.preferredTimeOption === 'start' ? 'Start' : 'Arrival'} Time:</strong> {journey.preferredTime || 'N/A'}
               </div>
               <div className="timing-box">
-                <strong>Travel Time:</strong> {journey.estimatedTravelTime}
+                <strong>Calculated Optimal Time:</strong> {journey.formattedStartTime}
               </div>
             </div>
 
-            {/* Second row: Duration and End Time */}
+            {/* Display other journey details */}
             <div className="timing-row">
+              <div className="timing-box">
+                <strong>Travel Time:</strong> {journey.estimatedTravelTime}
+              </div>
               <div className="timing-box">
                 <strong>Duration:</strong> {journey.duration}
               </div>

@@ -6,14 +6,28 @@ import './HomePage.css';
 
 function HomePage() {
   const [travelDate, setTravelDate] = useState('');
-  const [locations, setLocations] = useState([{ startPoint: '', endPoint: '', durationHours: '0', durationMinutes: '0' }]);
+  const [locations, setLocations] = useState([{ 
+    startPoint: '', 
+    endPoint: '', 
+    durationHours: '0', 
+    durationMinutes: '0', 
+    preferredTimeOption: '', // New state for preferred time option
+    preferredTime: '' // New state for preferred time input
+  }]);
   const [autocompleteStartRefs, setAutocompleteStartRefs] = useState([]);
   const [autocompleteEndRefs, setAutocompleteEndRefs] = useState([]);
-  const [priority, setPriority] = useState('shortest_time'); // Priority factor state
+  const [priority, setPriority] = useState('shortest_time');
   const navigate = useNavigate();
 
   const addLocation = () => {
-    setLocations([...locations, { startPoint: '', endPoint: '', durationHours: '0', durationMinutes: '0' }]);
+    setLocations([...locations, { 
+      startPoint: '', 
+      endPoint: '', 
+      durationHours: '0', 
+      durationMinutes: '0', 
+      preferredTimeOption: '', 
+      preferredTime: '' 
+    }]);
     setAutocompleteStartRefs([...autocompleteStartRefs, null]);
     setAutocompleteEndRefs([...autocompleteEndRefs, null]);
   };
@@ -24,9 +38,9 @@ function HomePage() {
       newAutocompleteRefs[index] = autocomplete;
       setAutocompleteStartRefs(newAutocompleteRefs);
     } else if (type === 'end') {
-      const newAutocompleteRefs = [...autocompleteEndRefs];
-      newAutocompleteRefs[index] = autocomplete;
-      setAutocompleteEndRefs(newAutocompleteRefs);
+      const newAutocompleteEndRefs = [...autocompleteEndRefs];
+      newAutocompleteEndRefs[index] = autocomplete;
+      setAutocompleteEndRefs(newAutocompleteEndRefs);
     }
   };
 
@@ -156,6 +170,34 @@ function HomePage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Preferred Time Option */}
+                <div className="form-group">
+                  <label>Preferred Time Option (Optional)</label>
+                  <select
+                    className="form-control"
+                    value={location.preferredTimeOption}
+                    onChange={(e) => handleInputChange(index, 'preferredTimeOption', e.target.value)}
+                  >
+                    <option value="">Select Preferred Time Option</option>
+                    <option value="start">Preferred Start Time</option>
+                    <option value="arrival">Preferred Arrival Time</option>
+                  </select>
+                </div>
+
+                {/* Preferred Time Input */}
+                {location.preferredTimeOption && (
+                  <div className="form-group">
+                    <label>Preferred {location.preferredTimeOption === 'start' ? 'Start' : 'Arrival'} Time</label>
+                    <input
+                      type="time"
+                      className="form-control"
+                      value={location.preferredTime}
+                      onChange={(e) => handleInputChange(index, 'preferredTime', e.target.value)}
+                    />
+                  </div>
+                )}
+
                 {index > 0 && (
                   <button type="button" className="btn btn-danger" onClick={() => removeLocation(index)}>
                     Remove
