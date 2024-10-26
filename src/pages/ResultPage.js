@@ -59,30 +59,33 @@ function ResultPage() {
           <div key={index} className="journey-box">
             <h4>Journey {journey.originalIndex + 1}</h4>
 
-            <div className="journey-details">
-              <div className="journey-locations">
-                <p><strong>Start Point:</strong> {journey.startPoint}</p>
-                <p><strong>End Point:</strong> {journey.endPoint}</p>
+            {/* Start Point and End Point in separate boxes */}
+            <div className="journey-locations">
+              <div className="location-box">
+                <strong>Start Point:</strong> {journey.startPoint}
               </div>
-
-              {/* First row: Optimal Start Time and Estimated Travel Time */}
-              <div className="timing-row">
-                <div className="timing-box">
-                  <strong>Optimal Start:</strong> {journey.formattedStartTime}
-                </div>
-                <div className="timing-box">
-                  <strong>Travel Time:</strong> {journey.estimatedTravelTime}
-                </div>
+              <div className="location-box">
+                <strong>End Point:</strong> {journey.endPoint}
               </div>
+            </div>
 
-              {/* Second row: Duration and End Time */}
-              <div className="timing-row">
-                <div className="timing-box">
-                  <strong>Duration:</strong> {journey.duration}
-                </div>
-                <div className="timing-box">
-                  <strong>End Time:</strong> {journey.formattedEndTime}
-                </div>
+            {/* First row: Optimal Start Time and Estimated Travel Time */}
+            <div className="timing-row">
+              <div className="timing-box">
+                <strong>Optimal Start:</strong> {journey.formattedStartTime}
+              </div>
+              <div className="timing-box">
+                <strong>Travel Time:</strong> {journey.estimatedTravelTime}
+              </div>
+            </div>
+
+            {/* Second row: Duration and End Time */}
+            <div className="timing-row">
+              <div className="timing-box">
+                <strong>Duration:</strong> {journey.duration}
+              </div>
+              <div className="timing-box">
+                <strong>End Time:</strong> {journey.formattedEndTime}
               </div>
             </div>
 
