@@ -58,8 +58,8 @@ function ResultPage() {
   if (!locations || locations.length === 0) {
     return (
       <div className="container result-container">
-        <h1 className="text-center mt-5">No Journey Data</h1>
-        <p>Please go back to the homepage and plan a journey.</p>
+        <h1 className="text-center mt-5">No Journey Data (Kāore he Raraunga Haerenga)</h1>
+        <p>Please go back to the homepage and plan a journey (Hoki atu ki te whārangi kāinga, ā, whakamahere i tētahi haerenga).</p>
       </div>
     );
   }
@@ -70,8 +70,8 @@ function ResultPage() {
         <div className="background-image-container">
           <div className="background-image">
             <div className="overlay-text">
-              <h1 className="title">Optimized Journey Plan</h1>
-              <p className="tagline">Making Every Moment Count on Your Route</p>
+              <h1 className="title">Optimized Journey Plan (Te Mahere Haerenga Pai)</h1>
+              <p className="tagline">Making Every Moment Count on Your Route (Whaihua i Ia Wā i Tō Ara)</p>
             </div>
           </div>
         </div>
@@ -79,44 +79,50 @@ function ResultPage() {
         <div className="journey-summary">
           <div className="travel-details">
             <div className="travel-box">
-              <strong>Date of Travel:</strong> {travelDate}
+              <strong>Date of Travel (Te Rā mō te Haerenga)</strong>
+              <div>{travelDate}</div>
             </div>
             <div className="travel-box">
-              <strong>Priority:</strong> {priority === 'shortest_time' ? 'Shortest Travel Time' : 'Minimal Traffic'}
+              <strong>Priority (Matua)</strong>
+              <div>{priority === 'shortest_time' ? 'Shortest Travel Time (Te Wā Poto Rawa)' : 'Minimal Traffic (Iti te Waka)'}</div>
             </div>
           </div>
         </div>
 
         {journeyData.map((journey, index) => (
           <div key={index} className="journey-box">
-            <h4>Journey {journey.originalIndex + 1}</h4>
+            <h4>Journey {index + 1} (Haerenga {index + 1})</h4>
 
             <div className="journey-locations">
               <div className="location-box">
-                <strong>Start Point:</strong> {journey.startPoint}
+                <strong>Start Point (Te Tānga Timatanga)</strong>
+                <div>{journey.startPoint}</div>
               </div>
               <div className="location-box">
-                <strong>End Point:</strong> {journey.endPoint}
+                <strong>End Point (Te Tānga Mutunga)</strong>
+                <div>{journey.endPoint}</div>
               </div>
             </div>
 
             <div className="timing-row">
               <div className="timing-box">
-                <strong>
-                  Preferred {journey.preferredTimeOption === 'start' ? 'Start Time' : 'Arrival Time'}:
-                </strong> {journey.preferredTime}
+                <strong>Preferred {journey.preferredTimeOption === 'start' ? 'Start Time (Te Wā Timatanga Pai)' : 'Arrival Time (Te Wā Taenga Pai)'}</strong>
+                <div>{journey.preferredTime}</div>
               </div>
               <div className="timing-box">
-                <strong>Optimal Departure Time:</strong> {journey.formattedStartTime}
+                <strong>Optimal Departure Time (Te Wā Timatanga Pai)</strong>
+                <div>{journey.formattedStartTime}</div>
               </div>
             </div>
 
             <div className="timing-row">
               <div className="timing-box">
-                <strong>Travel Time:</strong> {journey.estimatedTravelTime}
+                <strong>Travel Time (Te Wā Haere)</strong>
+                <div>{journey.estimatedTravelTime}</div>
               </div>
               <div className="timing-box">
-                <strong>End Time:</strong> {journey.formattedEndTime}
+                <strong>End Time (Te Wā Mutunga)</strong>
+                <div>{journey.formattedEndTime}</div>
               </div>
             </div>
 
@@ -135,6 +141,8 @@ function ResultPage() {
               onClick={() => handleGetDirections(journey.startPoint, journey.endPoint)}
             >
               Get Directions
+              <br />
+              <span>(Tikina te Aronga)</span>
             </button>
           </div>
         ))}

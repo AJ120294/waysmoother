@@ -73,14 +73,14 @@ function HomePage() {
         <div className="background-image">
           <div className="overlay-text">
             <h1 className="title">Way Smoother</h1>
-            <p className="catchphrase">Making Every Journey Count</p>
+            <p className="catchphrase">Making Every Journey Count (Te Aro o ia Haerenga)</p>
           </div>
         </div>
 
         {/* Date and Priority Fields in Line */}
         <div className="date-priority-row">
           <div className="date-box">
-            <label htmlFor="travelDate">Date of Travel</label>
+            <label htmlFor="travelDate">Date of Travel (Te Rā mō te Haerenga)</label>
             <input
               type="date"
               className="form-control"
@@ -92,23 +92,23 @@ function HomePage() {
           </div>
 
           <div className="priority-box">
-            <label>Priority</label>
+            <label>Priority (Matua)</label>
             <select
               className="form-control"
               value={priority}
               onChange={(e) => setPriority(e.target.value)}
               required
             >
-              <option value="" disabled>Select Priority</option>
-              <option value="shortest_time">Shortest Travel Time</option>
-              <option value="minimal_traffic">Minimal Traffic</option>
+              <option value="" disabled>Select Priority (Tīpakohia te Matua)</option>
+              <option value="shortest_time">Shortest Travel Time (Te Wā Poto Rawa)</option>
+              <option value="minimal_traffic">Minimal Traffic (Iti te Waka)</option>
             </select>
           </div>
         </div>
 
         {locations.map((location, index) => (
           <div key={index} className="journey-section">
-            <h4 className="journey-heading">Journey {index + 1}</h4>
+            <h4 className="journey-heading">Journey {index + 1} (Haerenga {index + 1})</h4>
             <div className="form-row mb-3">
               <div className="col">
                 <Autocomplete
@@ -118,7 +118,7 @@ function HomePage() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Start Point"
+                    placeholder="Start Point (Te Tānga Timatanga)"
                     value={location.startPoint}
                     onChange={(e) => handleInputChange(index, 'startPoint', e.target.value)}
                     required
@@ -133,7 +133,7 @@ function HomePage() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="End Point"
+                    placeholder="End Point (Te Tānga Mutunga)"
                     value={location.endPoint}
                     onChange={(e) => handleInputChange(index, 'endPoint', e.target.value)}
                     required
@@ -145,24 +145,24 @@ function HomePage() {
             {/* Preferred Time Option and Preferred Time in Same Line */}
             <div className="form-row mb-3 preferred-time-row">
               <div className="col">
-                <label>Preferred Time Option</label>
+                <label>Preferred Time Option (Te Kōwhiringa Wā Pai)</label>
                 <select
                   className="form-control"
                   value={location.preferredTimeOption}
                   onChange={(e) => handleInputChange(index, 'preferredTimeOption', e.target.value)}
                   required
                 >
-                  <option value="" disabled>Select Preferred Time Option</option>
-                  <option value="start">Preferred Start Time</option>
-                  <option value="arrival">Preferred Arrival Time</option>
+                  <option value="" disabled>Select Preferred Time Option (Tīpakohia te Wā Pai)</option>
+                  <option value="start">Preferred Start Time (Te Wā Timatanga Pai)</option>
+                  <option value="arrival">Preferred Arrival Time (Te Wā Taenga Pai)</option>
                 </select>
               </div>
 
               <div className="col">
                 <label>
-                  {location.preferredTimeOption ? 
-                    `Preferred ${location.preferredTimeOption === 'start' ? 'Start' : 'Arrival'} Time` 
-                    : 'Preferred Time'}
+                  {location.preferredTimeOption 
+                    ? `Preferred ${location.preferredTimeOption === 'start' ? 'Start' : 'Arrival'} Time (Te Wā Pai ${location.preferredTimeOption === 'start' ? 'Timatanga' : 'Taenga'})` 
+                    : 'Preferred Time (Te Wā Pai)'}
                 </label>
                 <input
                   type="time"
@@ -176,7 +176,7 @@ function HomePage() {
 
             {index > 0 && (
               <button type="button" className="btn btn-danger" onClick={() => removeLocation(index)}>
-                Remove
+                Remove (Tangohia)
               </button>
             )}
           </div>
@@ -189,12 +189,16 @@ function HomePage() {
             onClick={addLocation}
           >
             Add Another Journey
+            <br />
+            <span>(Tāpiri Ētahi Atu Haerenga)</span>
           </button>
           <button
             type="submit"
             className="btn btn-primary plan-button"
           >
             Plan Journey
+            <br />
+            <span>(Whakamāherea te Haerenga)</span>
           </button>
         </div>
       </form>
