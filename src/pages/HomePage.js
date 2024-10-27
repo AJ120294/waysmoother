@@ -6,14 +6,19 @@ import './HomePage.css';
 
 function HomePage() {
   const [travelDate, setTravelDate] = useState('');
-  const [locations, setLocations] = useState([{ startPoint: '', endPoint: '', durationHours: '0', durationMinutes: '0' }]);
+  const [locations, setLocations] = useState([{ 
+    startPoint: '', 
+    endPoint: '', 
+    preferredTimeOption: '', 
+    preferredTime: '' 
+  }]);
   const [autocompleteStartRefs, setAutocompleteStartRefs] = useState([]);
   const [autocompleteEndRefs, setAutocompleteEndRefs] = useState([]);
-  const [priority, setPriority] = useState('shortest_time'); // Priority factor state
+  const [priority, setPriority] = useState('');
   const navigate = useNavigate();
 
   const addLocation = () => {
-    setLocations([...locations, { startPoint: '', endPoint: '', durationHours: '0', durationMinutes: '0' }]);
+    setLocations([...locations, { startPoint: '', endPoint: '', preferredTimeOption: '', preferredTime: '' }]);
     setAutocompleteStartRefs([...autocompleteStartRefs, null]);
     setAutocompleteEndRefs([...autocompleteEndRefs, null]);
   };
@@ -23,10 +28,10 @@ function HomePage() {
       const newAutocompleteRefs = [...autocompleteStartRefs];
       newAutocompleteRefs[index] = autocomplete;
       setAutocompleteStartRefs(newAutocompleteRefs);
-    } else if (type === 'end') {
-      const newAutocompleteRefs = [...autocompleteEndRefs];
-      newAutocompleteRefs[index] = autocomplete;
-      setAutocompleteEndRefs(newAutocompleteRefs);
+    } else {
+      const newAutocompleteEndRefs = [...autocompleteEndRefs];
+      newAutocompleteEndRefs[index] = autocomplete;
+      setAutocompleteEndRefs(newAutocompleteEndRefs);
     }
   };
 
@@ -82,18 +87,34 @@ function HomePage() {
       <div className="row justify-content-center">
         <div className="col-md-8">
           <form onSubmit={handleSubmit} className="form-container">
+            
+            {/* Date and Priority Fields in Line */}
+            <div className="date-priority-row">
+              <div className="date-box">
+                <label htmlFor="travelDate">Date of Travel</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="travelDate"
+                  value={travelDate}
+                  onChange={(e) => setTravelDate(e.target.value)}
+                  required
+                />
+              </div>
 
-            {/* Date of Travel */}
-            <div className="form-group">
-              <label htmlFor="travelDate">Date of Travel</label>
-              <input
-                type="date"
-                className="form-control"
-                id="travelDate"
-                value={travelDate}
-                onChange={(e) => setTravelDate(e.target.value)}
-                required
-              />
+              <div className="priority-box">
+                <label>Priority</label>
+                <select
+                  className="form-control"
+                  value={priority}
+                  onChange={(e) => setPriority(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>Select Priority</option>
+                  <option value="shortest_time">Shortest Travel Time</option>
+                  <option value="minimal_traffic">Minimal Traffic</option>
+                </select>
+              </div>
             </div>
 
             {locations.map((location, index) => (
@@ -130,32 +151,35 @@ function HomePage() {
                       />
                     </Autocomplete>
                   </div>
-
-                  <div className="col">
-                    <label>Time Duration You Will Spend at This End Point</label>
-                    <div className="d-flex">
-                      <select
-                        className="form-control"
-                        value={location.durationHours}
-                        onChange={(e) => handleInputChange(index, 'durationHours', e.target.value)}
-                      >
-                        {Array.from({ length: 13 }, (_, i) => (
-                          <option key={i} value={i}>{i} hours</option>
-                        ))}
-                      </select>
-                      <select
-                        className="form-control ml-2"
-                        value={location.durationMinutes}
-                        onChange={(e) => handleInputChange(index, 'durationMinutes', e.target.value)}
-                      >
-                        <option value="0">0 minutes</option>
-                        <option value="15">15 minutes</option>
-                        <option value="30">30 minutes</option>
-                        <option value="45">45 minutes</option>
-                      </select>
-                    </div>
-                  </div>
                 </div>
+
+                {/* Preferred Time Option */}
+                <div className="form-group">
+                  <label>Preferred Time Option</label>
+                  <select
+                    className="form-control"
+                    value={location.preferredTimeOption}
+                    onChange={(e) => handleInputChange(index, 'preferredTimeOption', e.target.value)}
+                    required
+                  >
+                    <option value="" disabled>Select Preferred Time Option</option>
+                    <option value="start">Preferred Start Time</option>
+                    <option value="arrival">Preferred Arrival Time</option>
+                  </select>
+                </div>
+
+                {/* Preferred Time Input */}
+                <div className="form-group">
+                  <label>Preferred {location.preferredTimeOption === 'start' ? 'Start' : 'Arrival'} Time</label>
+                  <input
+                    type="time"
+                    className="form-control"
+                    value={location.preferredTime}
+                    onChange={(e) => handleInputChange(index, 'preferredTime', e.target.value)}
+                    required
+                  />
+                </div>
+
                 {index > 0 && (
                   <button type="button" className="btn btn-danger" onClick={() => removeLocation(index)}>
                     Remove
@@ -163,17 +187,7 @@ function HomePage() {
                 )}
               </div>
             ))}
-            <div className="form-group">
-              <label>Priority</label>
-              <select
-                className="form-control"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-              >
-                <option value="shortest_time">Shortest Travel Time</option>
-                <option value="minimal_traffic">Minimal Traffic</option>
-              </select>
-            </div>
+            
             <div className="button-group">
               <button
                 type="button"

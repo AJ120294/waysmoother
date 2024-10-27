@@ -45,7 +45,6 @@
   margin-bottom: 20px;
 }
 
-/* Styling for travel boxes */
 .travel-box {
   flex: 1;
   background-color: #f9f9f9;
@@ -71,7 +70,7 @@
 .journey-box h4 {
   font-size: 1.4rem;
   font-weight: bold;
-  color: #FF7043;  /* Match the page title color */
+  color: #FF7043;
   margin-bottom: 10px;
 }
 
@@ -95,16 +94,10 @@
 }
 
 /* Journey timings section with two rows of timings */
-.journey-timings {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
 .timing-row {
   display: flex;
   gap: 10px;
-  width: 100%;
+  margin-bottom: 15px;
 }
 
 .timing-box {
