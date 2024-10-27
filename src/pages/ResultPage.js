@@ -10,10 +10,12 @@ function ResultPage() {
   const { travelDate, locations, priority } = location.state || {};
 
   const [journeyData, setJourneyData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const containerStyle = {
     width: '100%',
-    height: '300px',
+    height: window.innerWidth > 768 ? '300px' : '200px',
   };
 
   useEffect(() => {
@@ -23,33 +25,35 @@ function ResultPage() {
     }
 
     const fetchJourneyData = async () => {
-      const results = await calculateOptimalJourneys(travelDate, locations);
-      setJourneyData(results);
+      try {
+        setIsLoading(true);
+        const results = await calculateOptimalJourneys(travelDate, locations);
+        setJourneyData(results);
+      } catch (err) {
+        setError('Failed to load journey data.');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchJourneyData();
   }, [locations, travelDate]);
 
-  const handleGetDirections = async (startPoint, endPoint) => {
-    try {
-      const response = await fetch('/api/get-directions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ startPoint, endPoint }),
-      });
-      
-      if (response.ok) {
-        const { url } = await response.json();
-        window.open(url, '_blank');
-      } else {
-        console.error('Failed to fetch directions from backend');
-      }
-    } catch (error) {
-      console.error('Error fetching directions:', error);
-    }
+  const handleGetDirections = (startPoint, endPoint) => {
+    const origin = encodeURIComponent(startPoint);
+    const destination = encodeURIComponent(endPoint);
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
+    window.open(googleMapsUrl, '_blank');
   };
+
+  if (isLoading) {
+    return <p>Loading journey data...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   if (!locations || locations.length === 0) {
     return (
