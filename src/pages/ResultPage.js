@@ -30,6 +30,27 @@ function ResultPage() {
     fetchJourneyData();
   }, [locations, travelDate]);
 
+  const handleGetDirections = async (startPoint, endPoint) => {
+    try {
+      const response = await fetch('/api/get-directions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ startPoint, endPoint }),
+      });
+      
+      if (response.ok) {
+        const { url } = await response.json();
+        window.open(url, '_blank');
+      } else {
+        console.error('Failed to fetch directions from backend');
+      }
+    } catch (error) {
+      console.error('Error fetching directions:', error);
+    }
+  };
+
   if (!locations || locations.length === 0) {
     return (
       <div className="container result-container">
@@ -42,7 +63,14 @@ function ResultPage() {
   return (
     <div className="container result-container">
       <div className="result-inner-container">
-        <h1 className="page-title">Optimized Journey Plan</h1>
+        <div className="background-image-container">
+          <div className="background-image">
+            <div className="overlay-text">
+              <h1 className="title">Optimized Journey Plan</h1>
+              <p className="tagline">Making Every Moment Count on Your Route</p>
+            </div>
+          </div>
+        </div>
 
         <div className="journey-summary">
           <div className="travel-details">
@@ -97,6 +125,13 @@ function ResultPage() {
                 {journey.directions && <DirectionsRenderer directions={journey.directions} />}
               </GoogleMap>
             </div>
+
+            <button 
+              className="directions-button" 
+              onClick={() => handleGetDirections(journey.startPoint, journey.endPoint)}
+            >
+              Get Directions
+            </button>
           </div>
         ))}
       </div>

@@ -2,41 +2,80 @@
 
 /* Styling for the home page container */
 .home-container {
-  padding-top: 40px;
+  padding-top: 0;
   background-color: #f0f4f8;
   min-height: 100vh;
-}
-
-/* Styling for the main heading */
-h1 {
-  font-size: 3.5rem;
-  font-weight: bold;
-  color: #FF7043;
-  margin-bottom: 10px;
-}
-
-/* Styling for the tagline */
-.catchphrase {
-  font-size: 1.5rem;
-  font-style: italic;
-  color: #8D6E63;
-  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
 }
 
 /* Form container styles */
 .form-container {
   background-color: #ffffff;
-  padding: 30px;
   border-radius: 10px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   margin-bottom: 40px;
+  overflow: hidden; /* Ensure content stays within rounded borders */
+  max-width: 800px; /* Optional max width for better fit */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background image container inside form */
+.background-image {
+  position: relative;
+  width: 100%;
+  height: 200px; /* Adjust the height as needed */
+  background-image: url('/Users/amanjain/Desktop/Python_Assignement_2/waysmoother/public/HomePage_Image1.jpg'); /* Path to your background image */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Semi-transparent overlay for improved readability */
+.background-image::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Dark overlay with opacity */
+  z-index: 1;
+}
+
+/* Overlay text styles */
+.overlay-text {
+  position: relative;
+  text-align: center;
+  color: #ffffff;
+  z-index: 2; /* Ensure text is above the overlay */
+}
+
+.overlay-text h1.title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #FF7043;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8); /* Stronger shadow for readability */
+  margin-bottom: 10px;
+}
+
+.overlay-text p.catchphrase {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: #FFFFFF; /* Change color to white for better contrast */
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8); /* Enhanced shadow */
+  margin-bottom: 0;
 }
 
 /* Date and Priority row styling to align them horizontally */
 .date-priority-row {
   display: flex;
   gap: 20px;
-  margin-bottom: 20px;
+  margin: 20px 30px; /* Add margin to space it from the image */
 }
 
 /* Styling for each box in the Date and Priority row */
@@ -62,7 +101,7 @@ h1 {
   padding: 15px;
   border: 1px solid #dee2e6;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin: 20px 30px; /* Matches date-priority-row spacing */
   background-color: #f8f9fa;
 }
 
@@ -74,9 +113,13 @@ h1 {
   color: #495057;
 }
 
-/* Add spacing between the input fields */
-.form-row {
-  margin-bottom: 15px;
+/* Flexbox for the button group */
+.button-group {
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px;
+  margin: 20px 30px;
+  padding-bottom: 30px; /* Add bottom padding to the form */
 }
 
 /* Input fields styling */
@@ -85,25 +128,6 @@ input, select {
   font-size: 1rem;
   border-radius: 6px;
   border: 1px solid #ced4da;
-}
-
-/* Dropdown styling for time duration */
-.d-flex select {
-  flex: 1;
-  margin-right: 10px;
-}
-
-/* Priority dropdown */
-.form-group {
-  margin-bottom: 20px;
-}
-
-/* Flexbox for the button group */
-.button-group {
-  display: flex;
-  justify-content: flex-start;
-  gap: 30px;
-  margin-top: 20px;
 }
 
 /* Adding hover effects for buttons */
@@ -119,11 +143,13 @@ input:focus, select:focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Image styling */
+/* Hide the extra image below the tagline */
 .journey-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+  display: none;
+}
+
+/* Preferred time row styling to keep options in line */
+.preferred-time-row {
+  display: flex;
+  gap: 20px;
 }
