@@ -42,7 +42,7 @@ function ResultPage() {
       
       if (response.ok) {
         const { url } = await response.json();
-        window.open(url, '_blank'); // Open Google Maps in a new tab
+        window.open(url, '_blank');
       } else {
         console.error('Failed to fetch directions from backend');
       }
@@ -63,7 +63,14 @@ function ResultPage() {
   return (
     <div className="container result-container">
       <div className="result-inner-container">
-        <h1 className="page-title">Optimized Journey Plan</h1>
+        <div className="background-image-container">
+          <div className="background-image">
+            <div className="overlay-text">
+              <h1 className="title">Optimized Journey Plan</h1>
+              <p className="tagline">Making Every Moment Count on Your Route</p>
+            </div>
+          </div>
+        </div>
 
         <div className="journey-summary">
           <div className="travel-details">
