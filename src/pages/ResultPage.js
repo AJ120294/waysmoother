@@ -68,23 +68,20 @@ function ResultPage() {
               </div>
             </div>
 
-            {/* Display Preferred Time Option and Calculated Optimal Time */}
             <div className="timing-row">
               <div className="timing-box">
-                <strong>Preferred {journey.preferredTimeOption === 'start' ? 'Start' : 'Arrival'} Time:</strong> {journey.preferredTime || 'N/A'}
+                <strong>
+                  Preferred {journey.preferredTimeOption === 'start' ? 'Start Time' : 'Arrival Time'}:
+                </strong> {journey.preferredTime}
               </div>
               <div className="timing-box">
-                <strong>Calculated Optimal Time:</strong> {journey.formattedStartTime}
+                <strong>Optimal Start Time:</strong> {journey.formattedStartTime}
               </div>
             </div>
 
-            {/* Display other journey details */}
             <div className="timing-row">
               <div className="timing-box">
                 <strong>Travel Time:</strong> {journey.estimatedTravelTime}
-              </div>
-              <div className="timing-box">
-                <strong>Duration:</strong> {journey.duration}
               </div>
               <div className="timing-box">
                 <strong>End Time:</strong> {journey.formattedEndTime}
