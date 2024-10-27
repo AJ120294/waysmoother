@@ -75,7 +75,7 @@ function ResultPage() {
                 </strong> {journey.preferredTime}
               </div>
               <div className="timing-box">
-                <strong>Optimal Start Time:</strong> {journey.formattedStartTime}
+                <strong>Optimal Departure Time:</strong> {journey.formattedStartTime}
               </div>
             </div>
 
