@@ -30,6 +30,27 @@ function ResultPage() {
     fetchJourneyData();
   }, [locations, travelDate]);
 
+  const handleGetDirections = async (startPoint, endPoint) => {
+    try {
+      const response = await fetch('/api/get-directions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ startPoint, endPoint }),
+      });
+      
+      if (response.ok) {
+        const { url } = await response.json();
+        window.open(url, '_blank'); // Open Google Maps in a new tab
+      } else {
+        console.error('Failed to fetch directions from backend');
+      }
+    } catch (error) {
+      console.error('Error fetching directions:', error);
+    }
+  };
+
   if (!locations || locations.length === 0) {
     return (
       <div className="container result-container">
@@ -97,6 +118,13 @@ function ResultPage() {
                 {journey.directions && <DirectionsRenderer directions={journey.directions} />}
               </GoogleMap>
             </div>
+
+            <button 
+              className="directions-button" 
+              onClick={() => handleGetDirections(journey.startPoint, journey.endPoint)}
+            >
+              Get Directions
+            </button>
           </div>
         ))}
       </div>

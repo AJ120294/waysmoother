@@ -69,18 +69,10 @@ function HomePage() {
 
   return (
     <div className="container home-container">
-      <div className="text-center">
-        <h1 className="mt-5 mb-2">Way Smoother</h1>
-        <p className="catchphrase">Making Every Journey Count</p>
-      </div>
-
-      <div className="row justify-content-center mt-5">
-        <div className="col-md-8 text-center">
-          <img
-            src="/HomePage_Image1.jpg"
-            alt="Journey Planner"
-            className="img-fluid journey-image"
-          />
+      <div className="background-image">
+        <div className="overlay-text">
+          <h1 className="title">Way Smoother</h1>
+          <p className="catchphrase">Making Every Journey Count</p>
         </div>
       </div>
 

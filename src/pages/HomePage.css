@@ -2,25 +2,59 @@
 
 /* Styling for the home page container */
 .home-container {
-  padding-top: 40px;
+  padding-top: 0;
   background-color: #f0f4f8;
   min-height: 100vh;
 }
 
-/* Styling for the main heading */
-h1 {
+/* Background image container */
+.background-image {
+  position: relative;
+  width: 100%;
+  height: 300px; /* Adjust the height as needed */
+  background-image: url('/Users/amanjain/Desktop/Python_Assignement_2/waysmoother/public/HomePage_Image1.jpg'); /* Path to your background image */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px; /* Adjust space below image if necessary */
+}
+
+/* Semi-transparent overlay for improved readability */
+.background-image::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Dark overlay with opacity */
+  z-index: 1;
+}
+
+/* Overlay text styles */
+.overlay-text {
+  position: relative;
+  text-align: center;
+  color: #ffffff;
+  z-index: 2; /* Ensure text is above the overlay */
+}
+
+.overlay-text h1.title {
   font-size: 3.5rem;
   font-weight: bold;
   color: #FF7043;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8); /* Stronger shadow for readability */
   margin-bottom: 10px;
 }
 
-/* Styling for the tagline */
-.catchphrase {
+.overlay-text p.catchphrase {
   font-size: 1.5rem;
   font-style: italic;
-  color: #8D6E63;
-  margin-bottom: 30px;
+  color: #FFFFFF; /* Change color to white for better contrast */
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8); /* Enhanced shadow */
+  margin-bottom: 0;
 }
 
 /* Form container styles */
@@ -119,11 +153,7 @@ input:focus, select:focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Image styling */
+/* Image styling (now in background) */
 .journey-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+  display: none; /* Hide the extra image below the tagline */
 }
