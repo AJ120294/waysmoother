@@ -2,6 +2,16 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
   const directionsService = new window.google.maps.DirectionsService();
   const initialJourneys = [];
 
+  // Function to format travel time in hours and minutes
+  const formatTravelTime = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours > 0) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ${mins > 0 ? `${mins} mins` : ''}`.trim();
+    }
+    return `${mins} mins`;
+  };
+
   for (const [index, location] of locations.entries()) {
     let optimalStartTime = null;
     let bestDirections = null;
@@ -16,9 +26,8 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
       },
     };
 
-    // Check the estimated travel time based on preferred time option
     if (location.preferredTimeOption === 'start') {
-      // Start-based: Set departureTime to preferred start time and calculate travel time
+      // Set departureTime to preferred start time for "start" option
       directionsRequest.drivingOptions.departureTime = preferredDateTime;
 
       try {
@@ -33,6 +42,7 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
         });
 
         if (result) {
+          // Use the bestguess estimated travel time to set optimalStartTime
           optimalStartTime = preferredDateTime;
           bestDirections = result;
         }
@@ -40,9 +50,9 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
         console.error(`Exception during directions request for journey ${index + 1}:`, error);
       }
     } else if (location.preferredTimeOption === 'arrival') {
-      // Arrival-based: Set departureTime to 30 minutes before preferred arrival time and calculate travel time
-      const windowStartTime = new Date(preferredDateTime.getTime() - 30 * 60 * 1000);
-      directionsRequest.drivingOptions.departureTime = windowStartTime;
+      // Set departure time to 1 hour before the preferred arrival time for "arrival" option
+      const departureEstimateTime = new Date(preferredDateTime.getTime() - 60 * 60 * 1000);
+      directionsRequest.drivingOptions.departureTime = departureEstimateTime;
 
       try {
         const result = await new Promise((resolve, reject) => {
@@ -56,12 +66,10 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
         });
 
         if (result) {
-          const travelTimeInSeconds = result.routes[0].legs[0].duration_in_traffic
-            ? result.routes[0].legs[0].duration_in_traffic.value
-            : result.routes[0].legs[0].duration.value;
+          const travelTimeInSeconds = result.routes[0].legs[0].duration_in_traffic.value;
 
-          // Set optimalStartTime without the additional 5-minute buffer
-          optimalStartTime = new Date(preferredDateTime.getTime() - travelTimeInSeconds * 1000);
+          // Calculate optimalStartTime as preferred arrival time - travel time - 5 minutes
+          optimalStartTime = new Date(preferredDateTime.getTime() - travelTimeInSeconds * 1000 - 5 * 60 * 1000);
           bestDirections = result;
         }
       } catch (error) {
@@ -69,9 +77,12 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
       }
     }
 
-    // Calculate end time directly as optimalStartTime + estimated travel time
+    // Calculate end time as optimalStartTime + rounded estimated travel time
     if (optimalStartTime instanceof Date && !isNaN(optimalStartTime) && bestDirections) {
-      const travelTimeInMilliseconds = bestDirections.routes[0].legs[0].duration.value * 1000;
+      // Round the duration_in_traffic to the nearest minute in seconds
+      const travelTimeInMinutes = Math.round(bestDirections.routes[0].legs[0].duration_in_traffic.value / 60);
+      const travelTimeInMilliseconds = travelTimeInMinutes * 60 * 1000;
+
       const endTime = new Date(optimalStartTime.getTime() + travelTimeInMilliseconds);
 
       const formattedStartTime = optimalStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
@@ -85,9 +96,7 @@ export const calculateOptimalJourneys = async (travelDate, locations) => {
         optimalStartTime,
         formattedStartTime,
         formattedEndTime,
-        estimatedTravelTime: bestDirections.routes[0].legs[0].duration_in_traffic
-          ? bestDirections.routes[0].legs[0].duration_in_traffic.text
-          : bestDirections.routes[0].legs[0].duration.text,
+        estimatedTravelTime: formatTravelTime(travelTimeInMinutes), // Display the formatted travel time
         endTime,
         directions: bestDirections,
         originalIndex: index,
