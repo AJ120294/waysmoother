@@ -127,7 +127,6 @@
   gap: 20px;
   margin-bottom: 15px;
 }
-
 .location-box {
   flex: 1;
   padding: 10px;
@@ -214,4 +213,11 @@
   .map-container {
     height: 300px;
   }
+}
+/* Maori Translation Styling */
+.maori-translation {
+  color: #FF7043; /* Same color as Optimized Journey Plan */
+  font-size: 0.9rem; /* Slightly smaller font for distinction */
+  display: block; /* Ensure it appears on a new line */
+  margin-top: 4px; /* Adds a bit of spacing from the English text */
 }

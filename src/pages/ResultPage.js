@@ -1,4 +1,3 @@
-// ResultPage.js
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { GoogleMap, DirectionsRenderer } from '@react-google-maps/api';
@@ -58,8 +57,8 @@ function ResultPage() {
   if (!locations || locations.length === 0) {
     return (
       <div className="container result-container">
-        <h1 className="text-center mt-5">No Journey Data (Kāore he Raraunga Haerenga)</h1>
-        <p>Please go back to the homepage and plan a journey (Hoki atu ki te whārangi kāinga, ā, whakamahere i tētahi haerenga).</p>
+        <h1 className="text-center mt-5">No Journey Data</h1>
+        <p>Please go back to the homepage and plan a journey.</p>
       </div>
     );
   }
@@ -70,8 +69,8 @@ function ResultPage() {
         <div className="background-image-container">
           <div className="background-image">
             <div className="overlay-text">
-              <h1 className="title">Optimized Journey Plan (Te Mahere Haerenga Pai)</h1>
-              <p className="tagline">Making Every Moment Count on Your Route (Whaihua i Ia Wā i Tō Ara)</p>
+              <h1 className="title">Optimized Journey Plan</h1>
+              <p className="tagline">Making Every Moment Count on Your Route <br /><span className="maori-translation">(Whaihua i Ia Wā i Tō Ara)</span></p>
             </div>
           </div>
         </div>
@@ -79,49 +78,60 @@ function ResultPage() {
         <div className="journey-summary">
           <div className="travel-details">
             <div className="travel-box">
-              <strong>Date of Travel (Te Rā mō te Haerenga)</strong>
+              <strong>Date of Travel</strong><br />
+              <span className="maori-translation">(Te Rā mō te Haerenga)</span>
               <div>{travelDate}</div>
             </div>
             <div className="travel-box">
-              <strong>Priority (Matua)</strong>
-              <div>{priority === 'shortest_time' ? 'Shortest Travel Time (Te Wā Poto Rawa)' : 'Minimal Traffic (Iti te Waka)'}</div>
+              <strong>Priority</strong><br />
+              <span className="maori-translation">(Matua)</span>
+              <div>{priority === 'shortest_time' ? 'Shortest Travel Time' : 'Minimal Traffic'}</div>
             </div>
           </div>
         </div>
 
         {journeyData.map((journey, index) => (
           <div key={index} className="journey-box">
-            <h4>Journey {index + 1} (Haerenga {index + 1})</h4>
-
+              <h4>
+                <span style={{ color: "#495057" }}>Journey {index + 1}</span>
+                <br />
+                <span className="maori-translation">(Haerenga {index + 1})</span>
+              </h4>
             <div className="journey-locations">
               <div className="location-box">
-                <strong>Start Point (Te Tānga Timatanga)</strong>
+                <strong>Start Point</strong><br />
+                <span className="maori-translation">(Te Tānga Timatanga)</span>
                 <div>{journey.startPoint}</div>
               </div>
               <div className="location-box">
-                <strong>End Point (Te Tānga Mutunga)</strong>
+                <strong>End Point</strong><br />
+                <span className="maori-translation">(Te Tānga Mutunga)</span>
                 <div>{journey.endPoint}</div>
               </div>
             </div>
 
             <div className="timing-row">
               <div className="timing-box">
-                <strong>Preferred {journey.preferredTimeOption === 'start' ? 'Start Time (Te Wā Timatanga Pai)' : 'Arrival Time (Te Wā Taenga Pai)'}</strong>
+                <strong>Preferred {journey.preferredTimeOption === 'start' ? 'Start Time' : 'Arrival Time'}</strong><br />
+                <span className="maori-translation">{journey.preferredTimeOption === 'start' ? '(Te Wā Timatanga Pai)' : '(Te Wā Taenga Pai)'}</span>
                 <div>{journey.preferredTime}</div>
               </div>
               <div className="timing-box">
-                <strong>Optimal Departure Time (Te Wā Timatanga Pai)</strong>
+                <strong>Optimal Departure Time</strong><br />
+                <span className="maori-translation">(Te Wā Timatanga Pai)</span>
                 <div>{journey.formattedStartTime}</div>
               </div>
             </div>
 
             <div className="timing-row">
               <div className="timing-box">
-                <strong>Travel Time (Te Wā Haere)</strong>
+                <strong>Travel Time</strong><br />
+                <span className="maori-translation">(Te Wā Haere)</span>
                 <div>{journey.estimatedTravelTime}</div>
               </div>
               <div className="timing-box">
-                <strong>End Time (Te Wā Mutunga)</strong>
+                <strong>End Time</strong><br />
+                <span className="maori-translation">(Te Wā Mutunga)</span>
                 <div>{journey.formattedEndTime}</div>
               </div>
             </div>

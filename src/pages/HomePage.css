@@ -153,3 +153,9 @@ input:focus, select:focus {
   display: flex;
   gap: 20px;
 }
+/* Maori Translation Styling */
+.maori-translation {
+  color: #FF7043; /* Match title color */
+  font-size: 0.9rem; /* Slightly smaller font for distinction */
+  display: block; /* Ensures it appears on a new line */
+}
