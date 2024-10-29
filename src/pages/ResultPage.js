@@ -146,8 +146,8 @@ function ResultPage() {
               </GoogleMap>
             </div>
 
-            <button 
-              className="directions-button" 
+            <button
+              className="directions-button"
               onClick={() => handleGetDirections(journey.startPoint, journey.endPoint)}
             >
               Get Directions
