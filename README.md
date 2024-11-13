@@ -78,12 +78,11 @@ To set up this project locally, please follow these steps:
    - Visit `http://localhost:3000` in your browser.
 
 ## Usage
-1. **Login**: Access the application (if authentication is required) with a secure login.
-2. **Input Details**: Enter multiple journey start and end points along with travel preferences.
-3. **Set Date and Time**: Select a date and time for future planning.
-4. **Route Generation**: Generate the route based on selected preferences and view detailed journey information.
-5. **Map Interaction**: Use the embedded map for an interactive view of routes and directions.
-6. **View Journey Summary**: Check the optimized route summary with time estimations, travel duration, and traffic considerations.
+1. **Input Details**: Enter multiple journey start and end points along with travel preferences.
+2. **Set Date and Time**: Select a date and time for future planning.
+3. **Route Generation**: Generate the route based on selected preferences and view detailed journey information.
+4. **Map Interaction**: Use the embedded map for an interactive view of routes and directions.
+5. **View Journey Summary**: Check the optimized route summary with time estimations, travel duration, and traffic considerations.
 
 ## Configuration
 The following configuration options can be set in the `.env` files:
