@@ -9,7 +9,7 @@ const libraries = ['places']; // Required for the Autocomplete
 
 function App() {
   return (
-    <LoadScript googleMapsApiKey="AIzaSyBlCG_B-dTqzrexzWxe8D8wyJ24UmtCf-c" libraries={libraries}>
+    <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY" libraries={libraries}>
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
